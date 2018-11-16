@@ -35,32 +35,32 @@
                     </div>
                     <div class="card-text">
 
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-auto col-lg-3 col-md-4 col-sm-6 mb-2">
             <div class="card">
                 <div class="card-body">
-                        <div class="card-title">
+                    <div class="card-title">
 
-                            </div>
-                            <div class="card-text">
-        
-                            </div>         
+                    </div>
+                    <div class="card-text">
+
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-auto col-lg-3 col-md-4 col-sm-6 mb-2">
             <div class="card">
                 <div class="card-body">
-                        <div class="card-title">
+                    <div class="card-title">
 
-                            </div>
-                            <div class="card-text">
-        
-                            </div> 
-                        </div>
+                    </div>
+                    <div class="card-text">
+
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-auto col-lg-3  col-md-4 col-sm-6 mb-2">
@@ -70,11 +70,41 @@
 
                     </div>
                     <div class="card-text">
-        
-                    </div> 
+
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <table class="tableData" class="table table-striped table-bordered">
+            <thead>
+                <th>Order Code</th>
+                <th>Retailer</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Details</th>
+                <th>State</th>
+            </thead>
+            <tbody>
+                <% orders.forEach( (order) => {  %>
+                <td>
+                    <% order.sales_order_code %>
+                </td>
+                <td>
+                    <% order.pharmacy_id.pharma_name %>
+                </td>
+                <td>
+                    <% order.grand_total %>
+                </td>
+                <td>
+                    <%= moment(order.created_at).format('LLLL') %>
+                </td>
+                <td>Show Details</td>
+                <td>State</td>
+                <% }) %>
+            </tbody>
+        </table>
     </div>
 </main>
 <!--/Main layout-->
@@ -90,10 +120,17 @@
 
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="assets/js/mdb.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
 <script>
     // SideNav Initialization
     $(".button-collapse").sideNav();
     new WOW().init();
+    $(document).ready(function () {
+        $('.tableData').DataTable({
+            responsive: true
+        });
+    });
 </script>
 
 </body>

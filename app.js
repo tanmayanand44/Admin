@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 const express = require('express');
 const moment = require('moment');
 
+const Order = require('./models/SalesOrder');
+const Pharmacy = require('./models/pharmacy');
+
 const app = express();
 
 const MONGODB_URI = "mongodb://GiteshMedi:shastri1@ds263590.mlab.com:63590/medicento";
@@ -41,7 +44,14 @@ app.use(express.static(__dirname + '/public'))
 app.locals.moment = moment;
 
 app.use('/', (req, res, next) => {
-    res.render('index.ejs');
+    Order.find().populate('pharmacy_id').exec().then((orders) => {
+        console.log(orders);
+        res.render('index.ejs', {
+            orders: orders
+        });
+    }).catch(err => {
+        console.log(err);
+    });
 });
 
 module.exports = app;
