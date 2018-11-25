@@ -1,0 +1,25 @@
+<% include header.ejs %>
+<main>
+<div class="container"  style="margin: 60px;">
+    <form action="/camp" method="post">
+                <div class="form-group">
+                        <label for="name"><strong> Campaign Name</strong></label><br>
+                        <input type="text" name="name" id="name" required>
+                </div>
+                <div class="form-group">
+                        <label for="type"><strong> Campaign Type&nbsp;</strong></label><br>
+                        <select name="type" id="type">
+                            <option value="Promotional">Promotional</option>
+                            <option value="Transactional">Transactional</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                        <label for="content"><strong> Campaign Content</strong></label><br>
+                        <textarea name="content" id="content" cols="30" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="SUBMIT" name="submit" id="submit">
+                </div>
+    </form>
+</div>    
+</main>

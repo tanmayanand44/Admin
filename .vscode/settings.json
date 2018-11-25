@@ -1,0 +1,12 @@
+{
+    "editor.fontSize": 14,
+    "editor.formatOnSave": true,
+    "editor.accessibilitySupport": "on",
+    "codeBlast.enabled": true,
+    "codeBlast.particles.color": "rgb(24,56,45)",
+    "codeBlast.particles.shape": "dot",
+    "codeBlast.particles.texts": [
+        "hello world"
+    ],
+    "codeBlast.shake.enabled": true
+}

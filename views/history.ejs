@@ -1,0 +1,70 @@
+<% include header.ejs %>
+
+<!--Main layout-->
+<main>
+    <div class="container">
+        <h3 class="d-flex justify-content-center">All Orders</h3>
+        <table class="tableData" class="table table-striped table-bordered">
+            <thead>
+                <th>Order Code</th>
+                <th>Retailer</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Details</th>
+                <th>State</th>
+            </thead>
+            <tbody>
+                <% orders.forEach( (order) => { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>  
+                <tr>
+                    <td>
+                    <%= order.sales_order_code %>
+                </td>
+                <td>
+                    <%= order.pharmacy_id.pharma_name %>
+                </td>
+                <td>
+                    <%= order.grand_total %>
+                </td>
+                <td>
+                    <%= moment(time1).format('YYYY/MM/DD') %>
+                </td>
+                <td>Show Details</td>
+                <td>State</td>
+            </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <button id="send">Send</button>
+    </div>
+</main>
+
+<% include footer.ejs %>
+
+<script>
+    // SideNav Initialization
+    $(".button-collapse").sideNav();
+    new WOW().init();
+
+    $(document).ready(function () {
+        $('.tableData').DataTable({
+            "responsive": true,
+            "order": [[ 0, "desc" ]]
+        });
+        $('#send').click(() => {
+            $.ajax({
+                url: 'string/',
+                type: 'GET',
+                dataType: 'json',
+                success: (data) => {
+                    console.log('Sucess', data);
+                }
+            })
+        });
+    });
+
+
+</script>
+
+</body>
+
+</html>

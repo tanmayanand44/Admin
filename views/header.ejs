@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Material Design Bootstrap Template</title>
+    <title>Madicento Admin</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
@@ -18,7 +18,8 @@
     <link href="assets/css/mdb.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css ">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
 </head>
 
 <body class="fixed-sn black-skin">
@@ -37,16 +38,28 @@
                 <!-- Side navigation links -->
                 <li>
                     <ul class="collapsible collapsible-accordion">
-                        <li><a href="/" class="collapsible-header waves-effect active"><i class="fa fa-home"></i>
+                        <% if(active == 'index') { %>
+                        <li class="active">
+                            <% } %>
+                            <a href="/" class="collapsible-header waves-effect active"><i class="fa fa-home"></i>
                                 Dashboard</a>
                         </li>
-                        <li><a href="" class="collapsible-header waves-effect"><i class="fa fa-history"></i>
+                        <% if(active == 'history') { %>
+                        <li class="active">
+                            <% } %>
+                            <a href="/history" class="collapsible-header waves-effect active"><i class="fa fa-history"></i>
                                 Hostory</a>
                         </li>
-                        <li><a href="" class="collapsible-header waves-effect"><i class="fa fa-cart-arrow-down"></i>
+                        <% if(active == 'inventory') { %>
+                        <li class="active">
+                            <% } %>
+                            <a href="/inventory" class="collapsible-header waves-effect active"><i class="fa fa-cart-arrow-down"></i>
                                 Inventory</a>
                         </li>
-                        <li><a href="" class="collapsible-header waves-effect"><i class="fa fa-envelope"></i>
+                        <% if(active == 'marketing') { %>
+                        <li class="active">
+                            <% } %>
+                            <a href="/marketing" class="collapsible-header waves-effect active"><i class="fa fa-envelope"></i>
                                 Marketing</a>
                         </li>
                         <li><a href="" class="collapsible-header waves-effect"><i class="fa fa-medkit"></i>
@@ -78,7 +91,7 @@
         <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
             <!-- SideNav slide-out button -->
             <div class="float-left">
-                <a href="#" data-activates="slide-out" class="button-collapse"><i class="fa fa-bars"></i> Medicento</a>
+                <a href="" data-activates="slide-out" class="button-collapse"><i class="fa fa-bars"></i> Medicento</a>
             </div>
             <ul class="nav navbar-nav nav-flex-icons ml-auto">
                 <li class="nav-item dropdown">
