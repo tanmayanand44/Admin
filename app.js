@@ -12,6 +12,10 @@ const path = require('path');
 const Order = require('./models/SalesOrder');
 const Pharmacy = require('./models/pharmacy');
 
+const SalesPerson = require('./models/sperson');
+
+const User = require('./models/user');
+
 const SalesOrder = require('./models/SalesOrderItem');
 
 const vpimedicine = require('./models/vpimedicine');
@@ -48,7 +52,7 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 app.locals.moment = moment;
 
 var active = 'index';
@@ -82,6 +86,53 @@ app.use('/marketing', (req, res, next) => {
     active = 'marketing';
     res.render('marketing', {
         active: active
+    });
+});
+
+app.post('/mailOrder', (req, res, next) => {
+    Order.findById(req.body.order_id).populate('pharmacy_id').populate('order_items').exec().then((doc) => {
+        SalesPerson.findById(doc.sales_person_id).populate('user').exec().then((salesPerson) => {
+            time = moment(doc.created_at).add(30, 'm');
+            time1 = moment(time).add(5, 'h');
+            var csv = "Party Code, Item Code, Item Name, Qty\n";
+            console.log(doc);
+            content = "Order From " + doc.pharmacy_id.pharma_name + " on " + moment(time1).format('LLLL');
+            message = '<h3>From Admin Panel :</h3><h3>Pharmacy Name :' + doc.pharmacy_id.pharma_name + '</h3><h5>Medicine List : </h5>';
+            message += '<table border="1"><tr><th>Item Name</th><th><Item Code/th><th>Quantity</th></tr>';
+            doc.order_items.forEach((items) => {
+                csv +=
+                    salesPerson.user.useremail +
+                    "," +
+                    items.code +
+                    "," +
+                    items.medicento_name +
+                    "," +
+                    items.quantity +
+                    "\n";
+                message += '<tr><td>' + items.medicento_name + '</td><td>' +
+                    items.code + '</td><td>' +
+                    items.quantity + '</td></tr>';
+            });
+            nodeoutlook.sendEmail({
+                auth: {
+                    user: "giteshshastri123@outlook.com",
+                    pass: "shastri@1"
+                },
+                from: "giteshshastri123@outlook.com",
+                to: req.body.email,
+                subject: content,
+                html: message,
+                attachments: [{
+                    filename: "SalesOrder_Medicento_" +
+                        doc.pharma_name +
+                        "_" +
+                        moment(time1).format('LLL') +
+                        ".csv",
+                    content: csv
+                }]
+            });
+        });
+        res.status(200).json("Mail Sent");
     });
 });
 

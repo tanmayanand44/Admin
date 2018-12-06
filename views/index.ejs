@@ -94,336 +94,8 @@
       </div>
     </div>
   </div>
-  <div class="container">
-    <div id="active">
-      <h3 class="d-flex justify-content-center">Active Orders</h3>
-      <table class="tableData" class="mdl-data-table responsive-table" style="overflow-x: auto;overflow-y: hidden;">
-        <thead>
-          <th>Order Code</th>
-          <th>Retailer</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Details</th>
-          <th>State</th>
-        </thead>
-        <tbody>
-          <% activeOrders.forEach( (order) => { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>
-          <tr>
-            <td data-toggle="modal" data-target="#r<%= order._id %>" style="cursor: pointer;">
-              <%= order.sales_order_code %>
-            </td>
-            <td>
-              <%= order.pharmacy_id.pharma_name %>
-            </td>
-            <td>
-              <%= order.grand_total %>
-            </td>
-            <td>
-              <%= moment(time1).format('YYYY/MM/DD hh:mm a') %>
-            </td>
-            <td class="text-danger" style="cursor: pointer;">
-              <span data-toggle="modal" data-target="#o<%= order._id%>">show details </span>
-            </td>
-            <td>
-              <button name="state" type="submit" class="btn btn-success" onclick="changeState('<%= order._id%>', 'Accepted')">Accepted</button>
-              <button name="state" class="btn btn-danger" value="Decline" onclick="changeState('<%= order._id%>', 'Decline')">Decline</button>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-    <!---------------- Delivery Details popup screen  (give the dyanamic id i.e orderid)----------- -->
-    <% activeOrders.forEach((order) => { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>
-
-    <div id="r<%= order._id %>" class="modal bottom-sheet">
-      <div class="modal-content">
-        <div class="modal-header">
-          <p class="modal-title" style="text-align: center;">Change Order Status And Mail</p>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6" style="margin-top: 10px;">
-              <a href="<%= order._id %>/mail" class="btn red">Mail To Distributor</a>
-            </div>
-            <div class="col-md-6">
-              <span class="text-primary">Status</span>
-              <form>
-                <select name="status" id="s<%= order._id %>">
-                  <option value="Active" selected>Active</option>
-                  <option value="Not Delivered">Un Delivered</option>
-                  <option value="Canceled">Canceled</option>
-                  <option value="Delivered">Delivered</option>
-                </select>
-                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="changeStatus('<%= order._id %>')">Change</button>
-              </form>
-            </div>
-            <div class="col-md-12">
-              <button type="submit" class="btn btn-danger" onclick="return confirm('Are You sure you want to delete ?')">Delete</button>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-    <div id="o<%= order._id %>" tabindex="-1" role="dialog" class="modal fade colored-header colored-header-warning">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span class="mdi mdi-close"></span></button>
-            <h3 class="modal-title">Medicento</h3>
-          </div>
-          <div class="modal-body">
-            <section>
-
-              <!--------info row---------  -->
-              <div class="row invoice-info">
-                <div class="col-sm-6 invoice-col">
-                  From
-                  <address>
-                    <strong>
-                      <%= order.pharmacy_id.pharma_name %></strong><br>
-                    <%= order.pharmacy_id.pharma_address %><br>
-                    Phone: 8639133577 <br>
-                    Email: murali@gmail.com
-                  </address>
-                </div>
-                <!-- column -->
-                <div class="col-sm-6">
-                  <b>Invoice #058855</b>
-                  <br>
-                  <b>Order Code:</b>
-                  <%= order.sales_order_code %><br />
-                  <b>Order State: </b>
-                  <%= order.state %><br />
-                  <b>Order Date:</b>
-                  <%= moment(time1).format('LLLL') %><br>
-                </div>
-              </div>
-
-              <!--------- Products table ------------ -->
-              <div class="row">
-                <div class="col-xs-12 table-responsive">
-                  <table class="table  table-borderless">
-                    <thead>
-                      <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Cost</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% order.order_items.forEach((order_item) => { %>
-                      <tr>
-                        <td>
-                          <%= order_item.medicento_name %>
-                        </td>
-                        <td>
-                          <%= order_item.quantity %>
-                        </td>
-                        <td>Rs.
-                          <%= order_item.total_amount %>
-                        </td>
-                      </tr>
-                      <% }) %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <!-- -----------Delivery details ------------------>
-              <div class="row">
-                <div class="col-xs-5">
-                  <p class="lead">Delivery Details</p>
-                  <div class="table-responsive">
-                    <table class="table table-borderless">
-                      <tr>
-                        <td style="width:50%"><strong>Time of order :</strong></td>
-                        <td>
-                          <%= moment(time1).format('ddd, MMMM') %>
-                          <br>
-                          <%= moment(order.created_at).format('hh:mm a') %>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><strong>Estimated time of delivery :</strong></td>
-                        <td>Jun 30th 2018 <br>4:00 pm</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Average delivery time :</strong></td>
-                        <td> 3 hrs</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Delivery Person :</strong></td>
-                        <td>Shubman</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Track Order :</strong></td>
-                        <td><a href="#">link to track order</a></td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-                <!-- delivery detail column ends -->
-                <!----------------- amount details column------- -->
-                <div class="col-xs-offset-1 col-xs-6">
-                  <p class="lead">Amount Due </p>
-                  <div class="table-responsive">
-                    <table class="table">
-                      <tr>
-                        <th style="width:50%">Subtotal:</th>
-                        <td>Rs.</td>
-                      </tr>
-                      <tr>
-                        <th>GST (5%)</th>
-                        <td>Rs.</td>
-                      </tr>
-                      <tr>
-                        <th>Total:</th>
-                        <td>Rs.
-                          <%= order.grand_total %>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-                <!-- amount detail row ends -->
-              </div>
-            </section>
-          </div>
-          <div class="modal-footer">
-            <div class="row">
-              <!-- --------modal footer print -------- -->
-              <div class="col-md-6">
-                <br>
-                <button id="btnPrint" onclick="printDiv('o<%= order._id %>')" class="btn btn-lg btn-default text-primary xs-ml-20 xs-mr-50">
-                  <span class="mdi lead xs-mb-0 mdi-print xs-mr-20"></span>Print</button>
-              </div>
-              <div class="col-md-6">
-                <!-- ---------modal footer download -------------- -->
-                <p class="text-center text-bold">Download Details</p>
-                <button class="btn  btn-default pull-right xs-ml-20 xs-mr-40 xs-pl-20 xs-pr-20" onclick="download('o<%= order._id %>')">
-                  <span class="mdi mdi-download"></span> PDF</button>
-                <button class="btn btn-space btn-default pull-right xs-pl-20 xs-pr-20">
-                  <span class="mdi mdi-download"></span> CSV</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ----------------popup screen ends here ------------------ -->
-    <% })%>
-
-    <!--    recent orders            -->
-    <div class="row" id="deli" style="display: none;">
-      <div class="col-md-12">
-        <div class="panel panel-default panel-table">
-          <div class="panel-heading">
-            <div class="title" style="text-align: center;">Delivered Orders</div>
-          </div>
-          <div class="panel-body table-responsive">
-            <table id="tabled" class="tableData table table-striped table-hover table-fw-widget">
-              <thead>
-                <tr>
-                  <th>Order Code</th>
-                  <th>Pharmacy Name</th>
-                  <th>Product</th>
-                  <th class="number">Price</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <% deliveredOrders.forEach(function(order) {  time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm');%>
-              <tbody class="no-border-x">
-                <tr>
-                  <td>
-                    <%= order.sales_order_code %>
-                  </td>
-                  <td>
-                    <%= order.pharmacy_id.pharma_name %>
-                  </td>
-                  <td>
-                    <% order.order_items.forEach((order_item) => { %>
-                    <ul>
-                      <li>
-                        <%= order_item.medicento_name %> -
-                        <%= order_item.quantity %> - Rs.
-                        <%= order_item.total_amount %>
-                      </li>
-                    </ul>
-                    <% }) %>
-                  </td>
-                  <td class="number">Rs.
-                    <%= order.grand_total %>
-                  </td>
-                  <td>
-                    <%= moment(time).format('LLLL') %>
-                  </td>
-                </tr>
-                <% }); %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row" id="cancel" style="display: none;">
-      <div class="col-md-12">
-        <div class="panel panel-default panel-table">
-          <div class="panel-heading bg-danger text-white" style="text-align: center;">
-            <div class="title">Cancel Orders</div>
-          </div>
-          <div class="panel-body table-responsive">
-            <table id="tablec" class="tableData table table-striped table-hover table-fw-widget">
-              <thead>
-                <tr>
-                  <th>Order Code</th>
-                  <th>Pharmacy Name</th>
-                  <th>Product</th>
-                  <th class="number">Price</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <% cancelOrders.forEach(function(order) { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>
-              <tbody class="no-border-x">
-                <tr>
-                  <td>
-                    <%= order.sales_order_code %>
-                  </td>
-                  <td>
-                    <%= order.pharmacy_id.pharma_name %>
-                  </td>
-                  <td>
-                    <% order.order_items.forEach((order_item) => { %>
-                    <ul>
-                      <li>
-                        <%= order_item.medicento_name %> -
-                        <%= order_item.quantity %> - Rs.
-                        <%= order_item.total_amount %>
-                      </li>
-                    </ul>
-                    <% }) %>
-                  </td>
-                  <td class="number">
-                    <%= order.grand_total %>
-                  </td>
-                  <td>
-                    <%= moment(time).format('LLLL') %>
-                  </td>
-                </tr>
-                <% }); %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-
-
+  <% include ordersTables.ejs %>
+  <% include modals.ejs %>
   </div>
 </main>
 
@@ -452,6 +124,27 @@
     }
   }
 
+  function sendMai(id) {
+    mail = $('#mail' + id).val();
+    var order = {
+      order_id: id,
+      email: mail
+    };
+    $.ajax({
+      url: 'mailOrder/',
+      type: 'POST',
+      data: order,
+      success: (data) => {
+        console.log('Sucess', data);
+
+        Snackbar.show({
+          text: data,
+          pos: 'top-left'
+        });
+      }
+    })
+  }
+
   function changeStatus(id) {
     console.log(id);
     status = $('#s' + id).val();
@@ -465,6 +158,10 @@
       data: order,
       success: (data) => {
         console.log('Sucess', data);
+        Snackbar.show({
+          text: "Status Changed",
+          pos: 'top-left'
+        });
         location.reload();
       }
     })
@@ -507,6 +204,10 @@
       data: order,
       success: (data) => {
         console.log('Sucess', data);
+        Snackbar.show({
+          text: "Chnage State Successful",
+          pos: 'top-left'
+        });
       }
     })
   }

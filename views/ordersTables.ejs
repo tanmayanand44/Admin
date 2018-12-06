@@ -1,0 +1,142 @@
+<div class="container">
+    <div id="active">
+        <h3 class="d-flex justify-content-center">Active Orders</h3>
+        <table class="tableData" class="mdl-data-table responsive-table" style="overflow-x: auto;overflow-y: hidden;">
+            <thead>
+                <th>Order Code</th>
+                <th>Retailer</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Details</th>
+                <th>State</th>
+            </thead>
+            <tbody>
+                <% activeOrders.forEach( (order) => { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>
+                <tr>
+                    <td data-toggle="modal" data-target="#r<%= order._id %>" style="cursor: pointer;">
+                        <%= order.sales_order_code %>
+                    </td>
+                    <td>
+                        <%= order.pharmacy_id.pharma_name %>
+                    </td>
+                    <td>
+                        <%= order.grand_total %>
+                    </td>
+                    <td>
+                        <%= moment(time1).format('YYYY/MM/DD hh:mm a') %>
+                    </td>
+                    <td class="text-danger" style="cursor: pointer;">
+                        <span data-toggle="modal" data-target="#o<%= order._id%>">show details </span>
+                    </td>
+                    <td>
+                        <button name="state" type="submit" class="btn btn-success" onclick="changeState('<%= order._id%>', 'Accepted')">Accepted</button>
+                        <button name="state" class="btn btn-danger" value="Decline" onclick="changeState('<%= order._id%>', 'Decline')">Decline</button>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <!--    recent orders            -->
+    <div class="row" id="deli" style="display: none;">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading">
+                    <div class="title" style="text-align: center;">Delivered Orders</div>
+                </div>
+                <div class="panel-body table-responsive">
+                    <table id="tabled" class="tableData table table-striped table-hover table-fw-widget">
+                        <thead>
+                            <tr>
+                                <th>Order Code</th>
+                                <th>Pharmacy Name</th>
+                                <th>Product</th>
+                                <th class="number">Price</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <% deliveredOrders.forEach(function(order) {  time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm');%>
+                        <tbody class="no-border-x">
+                            <tr>
+                                <td>
+                                    <%= order.sales_order_code %>
+                                </td>
+                                <td>
+                                    <%= order.pharmacy_id.pharma_name %>
+                                </td>
+                                <td>
+                                    <% order.order_items.forEach((order_item) => { %>
+                                    <ul>
+                                        <li>
+                                            <%= order_item.medicento_name %> -
+                                            <%= order_item.quantity %> - Rs.
+                                            <%= order_item.total_amount %>
+                                        </li>
+                                    </ul>
+                                    <% }) %>
+                                </td>
+                                <td class="number">Rs.
+                                    <%= order.grand_total %>
+                                </td>
+                                <td>
+                                    <%= moment(time).format('LLLL') %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="cancel" style="display: none;">
+        <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+                <div class="panel-heading bg-danger text-white" style="text-align: center;">
+                    <div class="title">Cancel Orders</div>
+                </div>
+                <div class="panel-body table-responsive">
+                    <table id="tablec" class="tableData table table-striped table-hover table-fw-widget">
+                        <thead>
+                            <tr>
+                                <th>Order Code</th>
+                                <th>Pharmacy Name</th>
+                                <th>Product</th>
+                                <th class="number">Price</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <% cancelOrders.forEach(function(order) { time = moment(order.created_at).add(5, 'h'); time1 = moment(time).add(30, 'm'); %>
+                        <tbody class="no-border-x">
+                            <tr>
+                                <td>
+                                    <%= order.sales_order_code %>
+                                </td>
+                                <td>
+                                    <%= order.pharmacy_id.pharma_name %>
+                                </td>
+                                <td>
+                                    <% order.order_items.forEach((order_item) => { %>
+                                    <ul>
+                                        <li>
+                                            <%= order_item.medicento_name %> -
+                                            <%= order_item.quantity %> - Rs.
+                                            <%= order_item.total_amount %>
+                                        </li>
+                                    </ul>
+                                    <% }) %>
+                                </td>
+                                <td class="number">
+                                    <%= order.grand_total %>
+                                </td>
+                                <td>
+                                    <%= moment(time).format('LLLL') %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
