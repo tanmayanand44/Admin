@@ -57,6 +57,13 @@ app.locals.moment = moment;
 
 var active = 'index';
 
+app.use('/retiriveItems', (req, res, next) => {
+    var dict = [];
+    SalesOrder.find().exec().then(orders_items => {
+        res.status(200).json(orders_items);
+    });
+});
+
 app.use('/history', (req, res, next) => {
     active = 'history';
     Order.find().populate('pharmacy_id').exec().then((orders) => {
@@ -189,5 +196,6 @@ app.use('/', (req, res, next) => {
         console.log(err);
     });
 });
+
 
 module.exports = app;
