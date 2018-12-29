@@ -89,6 +89,26 @@ app.use('/marketing', (req, res, next) => {
     });
 });
 
+app.use('/filter', function(req, res, next){
+  var result=[];
+  var dateLow = new Date("2018-11-14T12:44:24.700Z");
+  var dateHigh = new Date("2018-11-14T12:44:24.700Z");
+  function checkRange(date) {
+    var d = new Date(date);
+    var status = (d>=dateLow)&&(d<=dateHigh) ;
+    if( status === true) return true;
+    else return false;
+  };
+  SalesOrder.find().exec().then(function(order_items){
+    for (var i in order_items){
+      if(checkRange(order_items[i].created_at)){
+            result.push(order_items[i]);
+          };
+    };
+    res.status(200).json(result);
+});
+});
+
 app.post('/mailOrder', (req, res, next) => {
     Order.findById(req.body.order_id).populate('pharmacy_id').populate('order_items').exec().then((doc) => {
         SalesPerson.findById(doc.sales_person_id).populate('user').exec().then((salesPerson) => {
