@@ -117,7 +117,11 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Estimated time of delivery :</strong></td>
-                                        <td>Jun 30th 2018 <br>4:00 pm</td>
+                                        <td>
+                                        <%= moment(time1).add(3,'h').format('ddd, MMMM') %>
+                                        <br>
+                                        <%= moment(order.created_at).add(3,'h').format('hh:mm a') %>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td><strong>Average delivery time :</strong></td>
